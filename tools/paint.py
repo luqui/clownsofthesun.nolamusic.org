@@ -21,18 +21,19 @@ PORTRAITS = {
     "nick-benoit": ("nick-benoit.png", (384, 893, 773)),
 }
 
-# Starry Night gradient: night ultramarine through cobalt and teal to chrome yellow.
-PALETTE = np.array(
+# Varnished Starry Night: Prussian blue through muted teal to old gold and ivory.
+STOPS = [0.00, 0.25, 0.45, 0.60, 0.75, 0.90, 1.00]
+COLORS = np.array(
     [
-        (0.00, (12, 20, 52)),
-        (0.25, (27, 52, 120)),
-        (0.45, (46, 98, 158)),
-        (0.60, (86, 140, 150)),
-        (0.75, (196, 170, 78)),
-        (0.90, (242, 204, 64)),
-        (1.00, (252, 238, 170)),
+        (14, 20, 34),
+        (30, 46, 74),
+        (52, 78, 104),
+        (92, 112, 108),
+        (164, 136, 82),
+        (206, 178, 116),
+        (238, 226, 196),
     ],
-    dtype=object,
+    dtype=float,
 )
 
 
@@ -89,9 +90,7 @@ def equalize(lum):
 
 
 def gradient_map(t):
-    stops = np.array([s for s, _ in PALETTE], dtype=float)
-    colors = np.array([c for _, c in PALETTE], dtype=float)
-    return np.stack([np.interp(t, stops, colors[:, i]) for i in range(3)], axis=-1)
+    return np.stack([np.interp(t, STOPS, COLORS[:, i]) for i in range(3)], axis=-1)
 
 
 def paint(src, box):
