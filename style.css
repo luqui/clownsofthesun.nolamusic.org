@@ -1,0 +1,194 @@
+:root {
+  --night: #0c1434;
+  --ultramarine: #1b3478;
+  --cobalt: #2e629e;
+  --sky: #9cc0e0;
+  --chrome: #f2cc40;
+  --cream: #fbeeb0;
+  --ochre: #c48a2c;
+  --brush: "Caveat Brush", cursive;
+  --serif: "Cormorant Garamond", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background:
+    repeating-linear-gradient(115deg, rgba(255,255,255,.025) 0 3px, transparent 3px 11px),
+    repeating-linear-gradient(25deg, rgba(0,0,0,.08) 0 2px, transparent 2px 9px),
+    radial-gradient(ellipse at 20% 10%, var(--ultramarine), var(--night) 70%);
+  background-attachment: fixed;
+  color: var(--cream);
+  font: 1.25rem/1.6 var(--serif);
+}
+
+a { color: var(--chrome); }
+
+h1, h2 {
+  font-family: var(--brush);
+  font-weight: normal;
+  color: var(--chrome);
+  line-height: 1;
+  margin: 0 0 .5em;
+}
+
+h2 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  text-shadow: 3px 3px 0 var(--ultramarine);
+}
+
+.sky {
+  position: relative;
+  min-height: min(92vh, 56vw);
+  display: grid;
+  place-items: center;
+  background: var(--night) url("art/sky.jpg") 50% center / cover;
+  animation: drift 40s ease-in-out infinite alternate;
+}
+
+@keyframes drift { to { background-position: 30% center; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; }
+}
+
+.masthead {
+  text-align: center;
+  padding: 2rem 2.5rem;
+  background: radial-gradient(closest-side, rgba(12, 20, 52, .75), transparent);
+}
+
+.masthead h1 {
+  font-size: clamp(3.5rem, 13vw, 9rem);
+  text-shadow: 4px 4px 0 var(--night), 0 0 40px rgba(242, 204, 64, .45);
+  transform: rotate(-2deg);
+}
+
+.eyebrow, .tagline {
+  margin: 0;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  color: var(--sky);
+}
+
+.tagline { font-size: 1.2rem; color: var(--cream); }
+
+nav {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .75rem 1.75rem;
+  font-family: var(--brush);
+  font-size: 1.6rem;
+}
+
+nav a { text-decoration: none; }
+nav a:hover { text-decoration: underline wavy; }
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  display: grid;
+  gap: 4rem;
+}
+
+.canvas {
+  max-width: 46rem;
+  justify-self: center;
+  padding: 2.5rem 3rem;
+  background: rgba(12, 20, 52, .65);
+  border: 10px solid var(--ochre);
+  border-image: repeating-linear-gradient(45deg, var(--ochre) 0 12px, var(--chrome) 12px 18px, #8a5a1c 18px 26px) 10;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+}
+
+.lede {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--sky);
+}
+
+#trio h2 { text-align: center; }
+
+.members {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2.5rem;
+}
+
+.member {
+  margin: 0;
+  text-align: center;
+}
+
+.member img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 12px solid var(--ochre);
+  border-image: repeating-linear-gradient(-35deg, var(--ochre) 0 10px, var(--chrome) 10px 15px, #8a5a1c 15px 22px) 12;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .5);
+  transition: transform .3s;
+}
+
+.member:nth-child(1) img { transform: rotate(-1.5deg); }
+.member:nth-child(2) img { transform: rotate(1deg); }
+.member:nth-child(3) img { transform: rotate(-.5deg); }
+.member img:hover { transform: rotate(0) scale(1.02); }
+
+.member figcaption {
+  margin-top: 1.25rem;
+  display: grid;
+}
+
+.member strong {
+  font-family: var(--brush);
+  font-weight: normal;
+  font-size: 2rem;
+  color: var(--chrome);
+}
+
+.member span {
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-size: .95rem;
+  color: var(--sky);
+}
+
+.downloads {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.downloads a {
+  display: inline-block;
+  padding: .4rem 1rem;
+  border: 2px solid var(--chrome);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.downloads a:hover { background: var(--chrome); color: var(--night); }
+
+.contact {
+  font-family: var(--brush);
+  font-size: 2rem;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--sky);
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .canvas { padding: 1.75rem 1.5rem; }
+}
