@@ -51,23 +51,26 @@ def kuwahara(img, radius):
     return np.take_along_axis(np.stack(means), best[None, ..., None], axis=0)[0]
 
 
-def flow_texture(lum, length=10, seed=0):
+def structure_tangent(lum):
     gy, gx = np.gradient(ndimage.gaussian_filter(lum, 2))
     jxx = ndimage.gaussian_filter(gx * gx, 6)
     jxy = ndimage.gaussian_filter(gx * gy, 6)
     jyy = ndimage.gaussian_filter(gy * gy, 6)
     angle = 0.5 * np.arctan2(2 * jxy, jxx - jyy) + np.pi / 2
-    tx, ty = np.cos(angle), np.sin(angle)
+    return np.cos(angle), np.sin(angle)
 
-    rng = np.random.default_rng(seed)
-    noise = ndimage.gaussian_filter(rng.random(lum.shape), 0.8)
-    ys, xs = np.mgrid[0 : lum.shape[0], 0 : lum.shape[1]].astype(float)
+
+def brushstrokes(tx, ty, length=10, grain=0.8, seed=0):
+    """Line integral convolution of noise along the unit field (tx, ty), normalized."""
+    shape = tx.shape
+    noise = ndimage.gaussian_filter(np.random.default_rng(seed).random(shape), grain)
+    ys, xs = np.mgrid[0 : shape[0], 0 : shape[1]].astype(float)
     total = noise.copy()
     for direction in (1, -1):
         px, py = xs.copy(), ys.copy()
         for _ in range(length):
-            ix = np.clip(px, 0, lum.shape[1] - 1).astype(int)
-            iy = np.clip(py, 0, lum.shape[0] - 1).astype(int)
+            ix = np.clip(px, 0, shape[1] - 1).astype(int)
+            iy = np.clip(py, 0, shape[0] - 1).astype(int)
             px += direction * tx[iy, ix]
             py += direction * ty[iy, ix]
             total += ndimage.map_coordinates(noise, (py, px), order=1, mode="reflect")
@@ -100,7 +103,7 @@ def paint(src, box):
     lum = smooth @ np.array([0.299, 0.587, 0.114])
     lum = 0.5 * equalize(lum) + 0.5 * stretch(lum)
 
-    strokes = flow_texture(lum)
+    strokes = brushstrokes(*structure_tangent(lum))
     lum = np.clip(lum + 0.04 * strokes, 0, 1)
     out = gradient_map(lum) * (1 + 0.06 * strokes[..., None])
     return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
